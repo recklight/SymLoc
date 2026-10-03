@@ -1,0 +1,103 @@
+[build-system]
+requires = ["setuptools>=77", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "symloc"
+version = "0.1.0"
+description = "Probability-distribution analysis of attack-resistant likelihood combiners for indoor Wi-Fi RSSI fingerprint localization."
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "RL" }]
+maintainers = [{ name = "RL" }]
+keywords = [
+    "indoor-localization",
+    "wifi-fingerprinting",
+    "rssi",
+    "spoofing-detection",
+    "robust-statistics",
+    "elementary-symmetric-polynomial",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering :: Information Analysis",
+    "Typing :: Typed",
+]
+dependencies = [
+    "numpy>=1.24",
+    "scipy>=1.10",
+    "scikit-learn>=1.2",
+    "pandas>=1.5",
+    "matplotlib>=3.6",
+    "pyyaml>=6.0",
+    "typer>=0.12",
+    # 'symloc train' and 'symloc predict' persist the fitted pipeline with joblib.
+    # scikit-learn happens to pull it in, but relying on a transitive dependency
+    # for a direct import is how a working install breaks somewhere else.
+    "joblib>=1.2",
+]
+
+[project.optional-dependencies]
+# Parquet output for the tidy result tables; CSV is always written regardless.
+parquet = ["pyarrow>=11.0"]
+# Kept behind an extra and imported lazily: nothing in the package needs torch.
+dl = ["torch>=2.2"]
+dev = ["pytest>=7.2", "ruff>=0.4"]
+
+[project.urls]
+Homepage = "https://github.com/recklight/SymLoc"
+Repository = "https://github.com/recklight/SymLoc"
+Issues = "https://github.com/recklight/SymLoc/issues"
+Changelog = "https://github.com/recklight/SymLoc/blob/master/CHANGELOG.md"
+
+[project.scripts]
+symloc = "symloc.cli:main"
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+symloc = ["py.typed"]
+
+[tool.pytest.ini_options]
+minversion = "7.2"
+testpaths = ["tests", "src"]
+# "src" makes the package importable straight from a checkout, without installing.
+pythonpath = ["src"]
+addopts = "-ra --doctest-modules"
+filterwarnings = [
+    "ignore::sklearn.exceptions.ConvergenceWarning",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+src = ["src", "tests", "examples"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B", "C4", "SIM", "RUF"]
+# RUF001-003 flag the full-width punctuation used in the Traditional Chinese
+# comments that explain the trickier derivations.
+ignore = ["RUF001", "RUF002", "RUF003"]
+
+[tool.ruff.lint.per-file-ignores]
+# typer declares options as call expressions in parameter defaults; that is the
+# framework's documented idiom, not the mutable-default bug B008 looks for.
+"src/symloc/cli.py" = ["B008"]
+"examples/*" = ["T201"]
+
+[tool.ruff.format]
+# README 的範例程式碼刻意對齊註解，不交給 formatter 處理
+exclude = ["*.md"]

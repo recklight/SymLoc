@@ -1,0 +1,36 @@
+# Bit-for-bit reproduction target.
+#
+# Running "symloc run -c configs/legacy_exact.yaml" gives the archived one-attack
+# curves with the arithmetic CORRECTED. To see the figure as archived,
+# with the sign error intact, use "symloc reproduce-legacy", which drives
+# symloc.legacy rather than the analysis pipeline.
+#
+# Expected peaks with these settings (0.5 dB grid, "sum" normalisation):
+#   baseline 0.0387524   M=0 0.0390380   M=1 0.0283886   M=2 0.0242794
+# The archived figure shows M=1 = 0.0305445, which is the sign error: 7.6% high.
+
+grid:
+  low_dbm: -85.0
+  high_dbm: -60.0
+  step_db: 0.5
+
+scenario:
+  name: legacy_exact
+  aps:
+    - {name: AP1, true_rssi_dbm: -70.0, sigma_db: 8.0}
+    - {name: AP2, true_rssi_dbm: -70.0, sigma_db: 10.0}
+    - {name: AP3, true_rssi_dbm: -70.0, sigma_db: 10.0}
+  attacked_indices: [2]
+  attack_offset_db: -20.0
+  m_values: [0, 1, 2]
+  combiner: esp
+
+normalize:
+  # The original divided by the sum over the truncated grid. Keeping that here
+  # is what makes the reproduction exact; switch to "density" to compare peaks
+  # across grid resolutions instead.
+  mode: sum
+  warn_truncation_above: 0.5
+
+output:
+  figure_formats: [pdf, png]

@@ -1,0 +1,17 @@
+cff-version: 1.2.0
+message: "如果你在研究中使用了本軟體，請依下列資訊引用。"
+title: "SymLoc"
+abstract: "Probability-distribution analysis of attack-resistant likelihood combiners for indoor Wi-Fi RSSI fingerprint localization."
+type: software
+authors:
+  - name: "RL"
+version: "0.1.0"
+date-released: "2026-09-22"
+license: MIT
+repository-code: "https://github.com/recklight/SymLoc"
+keywords:
+  - indoor-localization
+  - wifi-fingerprinting
+  - rssi
+  - spoofing-detection
+  - robust-statistics

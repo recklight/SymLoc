@@ -1,0 +1,36 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+dist/
+*.egg-info/
+.eggs/
+.venv/
+venv/
+
+# Testing / linting caches
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+# Run outputs: every figure and table is regenerated from a config, never committed
+results/*
+!results/.gitkeep
+
+# Legacy artefacts are read-only inputs the user supplies; they never enter the repo
+*.fig
+*.eps
+*.asv
+*.m
+*.mat
+
+# Editors / OS
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db

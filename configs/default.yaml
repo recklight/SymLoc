@@ -1,0 +1,74 @@
+# Default settings. Every other configuration in this folder overrides a subset
+# of these, so this file is the reference for what each key means.
+#
+# Nothing here points at a data file: this study is analytical, and every number
+# it produces comes from the model described below. See README.md for how to
+# point the tools at your own radio map instead.
+
+grid:
+  # Candidate sweep over the mean RSSI axis, in dBm. The defaults give the
+  # 51-point range the original analysis used.
+  low_dbm: -85.0
+  high_dbm: -60.0
+  # Peak heights of a "sum"-normalised curve scale with this step. It is written
+  # into every manifest so a reported peak can be read back correctly.
+  step_db: 0.5
+
+radio_map:
+  # "uniform"  : every AP shares one mean per candidate (the original
+  #              assumption; the abscissa is a signal level, not a place)
+  # "pathloss" : each AP has its own mean from its own distance, so the
+  #              abscissa is a real reference point. See pathloss_floor.yaml.
+  kind: uniform
+
+scenario:
+  name: default
+  aps:
+    - {name: AP1, true_rssi_dbm: -70.0, sigma_db: 8.0}
+    - {name: AP2, true_rssi_dbm: -70.0, sigma_db: 10.0}
+    - {name: AP3, true_rssi_dbm: -70.0, sigma_db: 10.0}
+  # Zero-based indices of the tampered APs. An empty list is the honest control.
+  attacked_indices: [2]
+  # Added to the honest reading of each tampered AP; negative suppresses it.
+  attack_offset_db: -20.0
+  # Orders of M to evaluate. Empty means every order from 0 to N-1.
+  m_values: []
+  # esp | product | sum | trimmed | median | softmin
+  combiner: esp
+  # Index of the true position on the grid; null lets the tools infer it.
+  true_index: null
+
+normalize:
+  # sum     : probability mass function (peaks scale with step_db)
+  # density : probability density (peaks invariant to step_db)
+  # none    : unnormalised likelihood (keeps absolute magnitude)
+  mode: sum
+  warn_truncation_above: 0.5
+
+montecarlo:
+  n_trials: 200
+  seed: 20120601
+  confidence: 0.95
+
+detection:
+  # logistic | svm | random_forest | mlp
+  model: logistic
+  n_splits: 5
+  n_trials_per_class: 250
+  seed: 20120601
+  attack_offsets_db: [-30.0, -25.0, -20.0, -15.0, -10.0]
+
+sweep:
+  attack_offsets_db: [-5.0, -10.0, -15.0, -20.0, -25.0, -30.0]
+  sigmas_db: []
+  n_ap_values: []
+  m_values: []
+  combiners: [esp]
+
+output:
+  results_dir: results
+  figure_formats: [pdf, png]
+  dpi: 300
+  write_parquet: true
+
+log_level: INFO

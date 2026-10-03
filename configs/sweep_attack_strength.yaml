@@ -1,0 +1,31 @@
+# Attack strength x shadowing x AP count x M, in one long-format table.
+#
+# This is the view a single hand-edited run cannot give: over what range of
+# attack strengths does tolerating more tampered access points actually help?
+#
+#   symloc sweep -c configs/sweep_attack_strength.yaml --metric js_divergence
+
+scenario:
+  name: sweep
+  aps:
+    - {name: AP1, true_rssi_dbm: -70.0, sigma_db: 8.0}
+    - {name: AP2, true_rssi_dbm: -70.0, sigma_db: 10.0}
+    - {name: AP3, true_rssi_dbm: -70.0, sigma_db: 10.0}
+  attacked_indices: [2]
+  attack_offset_db: -20.0
+  combiner: esp
+
+sweep:
+  attack_offsets_db: [-2.0, -5.0, -10.0, -15.0, -20.0, -25.0, -30.0, -40.0]
+  sigmas_db: [4.0, 8.0, 12.0]
+  n_ap_values: [3, 5, 8]
+  m_values: []
+  combiners: [esp, trimmed]
+
+normalize:
+  # Peaks are compared across AP counts here, so a density is the honest
+  # normalisation: it does not move when the grid resolution does.
+  mode: density
+
+output:
+  results_dir: results

@@ -1,0 +1,40 @@
+# A real floor plan instead of a shared signal level.
+#
+# The original candidate axis was a single mean RSSI shared by every access
+# point, so it carried no geometry and "reference location" was not a
+# meaningful label for it. Here each access point sits somewhere on a 20 x 15 m
+# floor and gets its own mean at each reference point from the log-distance
+# path loss model, which makes localization error measurable in metres.
+
+radio_map:
+  kind: pathloss
+  floor_width_m: 20.0
+  floor_depth_m: 15.0
+  spacing_m: 1.0
+  reference_rssi_dbm: -40.0
+  # About 3.0 indoors with partitions; see symloc.pathloss.TYPICAL_EXPONENTS.
+  path_loss_exponent: 3.0
+  reference_distance_m: 1.0
+  min_distance_m: 0.5
+
+scenario:
+  name: pathloss_floor
+  aps:
+    - {name: AP1, true_rssi_dbm: -60.0, sigma_db: 6.0, position_m: [0.0, 0.0]}
+    - {name: AP2, true_rssi_dbm: -66.0, sigma_db: 6.0, position_m: [20.0, 0.0]}
+    - {name: AP3, true_rssi_dbm: -68.0, sigma_db: 6.0, position_m: [0.0, 15.0]}
+    - {name: AP4, true_rssi_dbm: -70.0, sigma_db: 6.0, position_m: [20.0, 15.0]}
+    - {name: AP5, true_rssi_dbm: -58.0, sigma_db: 6.0, position_m: [10.0, 7.0]}
+  attacked_indices: [4]
+  attack_offset_db: -20.0
+  m_values: [0, 1, 2, 3, 4]
+  combiner: esp
+  # Reference point index of the true position on the 21 x 16 grid.
+  true_index: 176
+
+normalize:
+  mode: sum
+
+montecarlo:
+  n_trials: 200
+  seed: 20120601

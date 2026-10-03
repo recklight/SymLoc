@@ -1,0 +1,56 @@
+{
+  "description": "Read-only reference values for the legacy-parity regression test. These are derived numbers only: peak heights recovered from archived figures by numerical inversion, and the values this package computes for the same parameters. No original file, figure or measurement is reproduced or redistributed here.",
+  "units": {
+    "peaks": "probability mass per grid point, on a 0.5 dB grid of 51 points spanning -85 to -60 dBm",
+    "ratios": "dimensionless ratio of adjacent-order peaks"
+  },
+  "one_attack": {
+    "status": "parameters recovered; reproduced by this package to within 1.2e-7",
+    "recovered_parameters": {
+      "observed_rssi_dbm": [-70.0, -70.0, -90.0],
+      "sigma_db": [8.0, 10.0, 10.0],
+      "honest_rssi_dbm": -70.0,
+      "note": "The archived filename claimed the tampered access point reported -99 dBm. Solving for the parameters that reproduce all four curve peaks gives -90 dBm instead, so the filename and the contents disagree."
+    },
+    "archived_peaks": {
+      "baseline": 0.0387524,
+      "m0": 0.0390380,
+      "m1": 0.0305445,
+      "m2": 0.0242794
+    },
+    "archived_ratios": {
+      "rho_0_1": 1.27807,
+      "rho_1_2": 1.25805
+    },
+    "corrected_peaks": {
+      "m1": 0.0283886
+    },
+    "corrected_ratios": {
+      "rho_0_1": 1.37513,
+      "rho_1_2": 1.16925
+    },
+    "sign_error": {
+      "relative_overstatement": 0.0759,
+      "note": "The third pairwise product of e_2 was evaluated with the observation un-negated while its mean stayed negative, so that term was about 8e-39 instead of about 7e-4 and dropped out. The archived m1 peak of 0.0305445 matches the buggy expression, not the mathematics."
+    }
+  },
+  "unrecovered": {
+    "status": "parameters never recorded and not recoverable from the surviving code; kept as provenance only and NOT asserted by any test",
+    "one_attack_bars": [0.048671, 0.035257, 0.027938],
+    "two_attack_bars": [0.096875, 0.087499, 0.026119],
+    "two_attack_ratios": {
+      "rho_0_1": 1.33847,
+      "rho_1_2": 1.37838
+    },
+    "note": "A parameter search over plausible access point counts, observations and standard deviations reached these values no closer than about 7e-3, against 1.2e-7 for the one-attack case. Without a run manifest these figures cannot be regenerated, which is the gap symloc.io_.write_manifest exists to close."
+  },
+  "truncation_artefact": {
+    "parameters": {
+      "observed_rssi_dbm": [-70.0, -70.0, -88.0],
+      "sigma_db": [8.0, 10.0, 10.0]
+    },
+    "baseline_peak": 0.0387524,
+    "m0_peak": 0.0387726,
+    "note": "With the parameters left in the surviving script the attacked naive-Bayes curve peaks ABOVE the unattacked control. Nothing about the attack improved the fix; the attacked access point simply lost more mass off the grid edge, so dividing by a smaller total raised what remained."
+  }
+}
