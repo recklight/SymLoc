@@ -34,4 +34,5 @@ python -m ruff format --check .
 5. **新增指標時附上解析解對照。** `tests/test_metrics.py` 以兩個高斯分布的
    closed-form 結果驗證 KL 與 Bhattacharyya，新指標請比照辦理。
 
-6. **docstring 與註解用英文**（numpy-style），README 與使用者文件用繁體中文。
+6. **docstring 與註解用英文**（numpy-style）。`README.md` 是英文版，`README.zh-TW.md`
+   是繁體中文版，改其中一份時另一份要一起改；其他使用者文件用繁體中文。

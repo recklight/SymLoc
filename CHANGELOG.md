@@ -2,6 +2,12 @@
 
 本專案的版本格式遵循 [Semantic Versioning](https://semver.org/lang/zh-TW/)。
 
+## [Unreleased]
+
+### Added
+
+- 英文版 README（`README.md`，GitHub 預設顯示），繁體中文版在 `README.zh-TW.md`。
+
 ## [0.1.0] - 2026-09-22
 
 第一個版本。
